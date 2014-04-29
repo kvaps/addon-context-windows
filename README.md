@@ -4,6 +4,19 @@
 
 This addon produces a Windows Contextualization script to use in Windows Guest VMs running in an OpenNebula Cloud.
 
+Don't forget to add variables on OpenNebula template:
+
+"USERNAME"
+"PASSWORD"
+"ETH0_IP"
+"ETH0_MASK"
+"ETH0_MAC"
+"ETH0_DNS"
+"ETH0_GATEWAY"
+"ETH0_NETWORK"
+"SET_HOSTNAME"
+"INIT_SCRIPTS"
+
 ## Authors
 
 * Leader: Jaime Melis jmelis@opennebula.org
