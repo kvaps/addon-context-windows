@@ -171,22 +171,6 @@ function runScripts($context, $contextLetter)
     }
 }
 
-function isContextualized()
-{
-    Test-Path "c:\.opennebula-context"
-}
-
-function setContextualized()
-{
-    echo "contextualized" | Out-File "c:\.opennebula-context"
-}
-
-# Return if VM has already been contextualized
-if (isContextualized) {
-    Write-Host "VM already contextualized."
-    exit 0
-}
-
 # Get all drives and select only the one that has "CONTEXT" as a label
 $contextDrive = Get-WMIObject Win32_Volume | ? { $_.Label -eq "CONTEXT" }
 
@@ -210,5 +194,4 @@ if(Test-Path $contextScriptPath) {
     enablePing
     configureNetwork $context
     runScripts $context $contextLetter
-    setContextualized
 }
