@@ -14,7 +14,7 @@ function connectSmb($context) {
     $smbShareKey = "SMB" + $smbId + "_SHARE"
     while ($context[$smbShareKey]) {
         # Retrieve the data
-        $smbPrefix = "SHORTCUT" + $nicId + "_"
+        $smbPrefix = "SMB" + $smbId + "_"
 
         $shareKey     = $smbPrefix + "SHARE"
         $letterKey    = $smbPrefix + "LETTER"
@@ -50,7 +50,7 @@ function createShortcuts($context) {
     $shortcutNameKey = "SHORTCUT" + $shortcutId + "_NAME"
     while ($context[$shortcutNameKey]) {
         # Retrieve the data
-        $shortcutPrefix = "SHORTCUT" + $nicId + "_"
+        $shortcutPrefix = "SHORTCUT" + $shortcutId + "_"
         
         $nameKey     = $shortcutPrefix + "NAME"
         $progKey     = $shortcutPrefix + "PROG"
