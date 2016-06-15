@@ -73,6 +73,7 @@ function createShortcuts($context) {
         $shortcutId++;
         $shortcutNameKey = "SHORTCUT" + $shortcutId + "_NAME"   
     }
+}
 
 function runAutorun($context) {
     $autorunId = 0;
@@ -87,8 +88,6 @@ function runAutorun($context) {
         $autorunId++;
         $autorunKey = "AUTORUN" + $autorunId
     }
-}
-
 }
 
 ################################################################################
