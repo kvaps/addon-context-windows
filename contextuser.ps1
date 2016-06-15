@@ -74,6 +74,20 @@ function createShortcuts($context) {
         $shortcutNameKey = "SHORTCUT" + $shortcutId + "_NAME"   
     }
 
+function runAutorun($context) {
+    $autorunId = 0;
+    $autorunKey = "AUTORUN" + $autorunId
+    while ($context[$autorunKey]) {
+        $autorun    = $context[$autorunKey]
+       
+        # Run programm
+        Invoke-Expression $autorun
+        
+        # Next autorun
+        $autorunId++;
+        $autorunKey = "AUTORUN" + $autorunId
+    }
+}
 
 }
 
@@ -107,4 +121,5 @@ if(Test-Path $contextScriptPath) {
     $context = getContext $contextScriptPath
     createShortcuts $context
     connectSmb $context
+    runAutorun $context
 }
