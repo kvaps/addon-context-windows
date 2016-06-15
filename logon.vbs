@@ -1,5 +1,9 @@
 Set fso = CreateObject("Scripting.FileSystemObject")
 
+While Not fso.FileExists("c:\.opennebula-context")
+  WScript.Sleep 1000
+Wend
+
 If NOT Len(driveLetter) Then
     driveLetter = "C:"
 End If
