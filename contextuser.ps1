@@ -9,7 +9,7 @@ function getContext($file) {
     return $context
 }
 
-function connectSmb($context) {
+function connectShares($context) {
     $smbId = 0;
     $smbShareKey = "SMB" + $smbId + "_SHARE"
     while ($context[$smbShareKey]) {
@@ -18,13 +18,11 @@ function connectSmb($context) {
 
         $shareKey     = $smbPrefix + "SHARE"
         $letterKey    = $smbPrefix + "LETTER"
-        $printerKey   = $smbPrefix + "PRINTER"
         $userKey      = $smbPrefix + "USER"
         $passKey      = $smbPrefix + "PASS"
 
         $share    = $context[$shareKey]
         $letter   = $context[$letterKey]
-        $printer  = $context[$printerKey]
         $user     = $context[$userKey]
         $pass     = $context[$passKey]
 
@@ -33,15 +31,25 @@ function connectSmb($context) {
             $net = new-object -ComObject WScript.Network
             $net.MapNetworkDrive($letter + ':', $share, $false, $user, $pass)
         }
-        
-        # Map Printer
-        if ($printer) {
-            (New-Object -ComObject WScript.Network).AddWindowsPrinterConnection($printer)
-        }
-        
-        # Next Smb
+
+        # Next Smb Share
         $smbId++;
         $smbShareKey = "SMB" + $smbId + "_SHARE"
+    }
+}
+
+function connectPrinters($context) {
+    $printerId = 0;
+    $printerKey = "PRINTER" + $printerId
+    while ($context[$printerKey]) {
+        $printer  = $context[$printerKey]
+
+        # Map Printer
+        (New-Object -ComObject WScript.Network).AddWindowsPrinterConnection($printer)
+
+        # Next Printer
+        $printerId++;
+        $printerKey = "PRINTER" + $printerId
     }
 }
 
@@ -119,6 +127,7 @@ if ($contextDrive) {
 if(Test-Path $contextScriptPath) {
     $context = getContext $contextScriptPath
     createShortcuts $context
-    connectSmb $context
+    connectShares $context
+    connectPrinters $context
     runAutorun $context
 }
