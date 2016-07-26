@@ -110,7 +110,12 @@ function configureNetwork($context) {
         $nic = Get-WMIObject Win32_NetworkAdapterConfiguration | `
                 where {$_.IPEnabled -eq "TRUE" -and $_.MACAddress -eq $mac}
 
-        $nic.ReleaseDHCPLease()
+        $nic | ForEach-Object {
+            $Disable = "wmic path win32_networkadapter where index=" + $_.Index + " call disable"
+            cmd /C $Disable
+            $Enable = "wmic path win32_networkadapter where index=" + $_.Index + " call enable"
+            cmd /C $Enable
+        }
         $nic.EnableStatic($ip , $netmask)
         if ($gateway) {
             $nic.SetGateways($gateway)
