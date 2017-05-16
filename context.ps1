@@ -508,6 +508,37 @@ function runScripts($context, $contextLetter)
     Write-Output ""
 }
 
+function listDisks()
+{
+  'list disk' | diskpart |
+    ? { $_ -match 'disk (\d+)\s+online\s+\d+ .?b\s+\d+ [gm]b' } |
+    % { $matches[1] }
+}
+
+function listPartitions($disk)
+{
+  "select disk $disk", "list partition" | diskpart |
+    ? { $_ -match 'partition (\d+)' } |
+    % { $matches[1] }
+}
+
+function extendPartition($disk, $part)
+{
+  "select disk $disk","select partition $part","extend" | diskpart | Out-Null
+}
+
+function growPartitions()
+{
+    Write-Output "- Grow partitions"
+    #listDisks | % {
+    #  $disk = $_
+      $disk = 0
+      listPartitions $disk | % {
+        extendPartition $disk $_
+      }
+    #}
+}
+
 ################################################################################
 # Main
 ################################################################################
@@ -544,6 +575,7 @@ if ($contextDrive) {
 # Execute script
 if(Test-Path $contextScriptPath) {
     $context = getContext $contextScriptPath
+    growPartitions
     renameComputer $context
     addLocalUser $context
     enableRemoteDesktop
